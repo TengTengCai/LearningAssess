@@ -9,7 +9,7 @@ class TestPaper(BaseModel):
     description = models.TextField(verbose_name='说明', null=True, blank=True, help_text='说明')
 
     class Meta:
-        verbose_name = '测试试卷'
+        verbose_name_plural = '测试试卷'
         db_table_comment = "测试试卷"
 
 
