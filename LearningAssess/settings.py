@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*', '0.0.0.0']
 BASE_CONFIG = configparser.ConfigParser()
 BASE_CONFIG.read('config.ini')
 MYSQL_SETTINGS = BASE_CONFIG['MYSQL_SETTINGS']
-REDIS_SETTINGS = BASE_CONFIG['MYSQL_SETTINGS']
+REDIS_SETTINGS = BASE_CONFIG['REDIS_SETTINGS']
 
 # Application definition
 
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
-    'apps',
+    'apps.tiku',
 ]
 
 MIDDLEWARE = [
@@ -112,11 +112,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-Hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
-USE_I18N = False
+USE_I18N = True
 
 USE_TZ = False
 
@@ -137,10 +137,11 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION":
-            f"redis://[:{REDIS_SETTINGS['passwd']}]@{REDIS_SETTINGS['host']}:{REDIS_SETTINGS['port']}/"
+            f"redis://{REDIS_SETTINGS['host']}:{REDIS_SETTINGS['port']}/"
             f"{REDIS_SETTINGS['db']}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": REDIS_SETTINGS['passwd'],
             "CONNECTION_POOL_KWARGS": {"max_connections": 128}
         }
     }
