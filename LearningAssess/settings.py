@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'apps.tiku',
+    'apps.wechat',
 ]
 
 MIDDLEWARE = [
