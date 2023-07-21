@@ -1,15 +1,26 @@
 from django.contrib import admin
 
-from .models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject
+from .models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
 
 
 # Register your models here.
+class SubjectInline(admin.TabularInline):
+    model = Subject
+    raw_id_fields = ['test_paper']
+
+
+class OptionInline(admin.TabularInline):
+    model = Option
+    raw_id_fields = ['servey_result']
 
 
 class TestPaperAdmin(admin.ModelAdmin):
     fields = ['paper_name', 'description']
     list_display = ['id', 'paper_name', 'description']
     list_display_links = ['id', 'paper_name', 'description']
+    inlines = [
+      SubjectInline
+    ]
 
 
 class LargeClassAdmin(admin.ModelAdmin):
@@ -38,8 +49,25 @@ class SubjectAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'topic']
 
 
+class SurveyResultAdmin(admin.ModelAdmin):
+    fields = ['test_paper', 'user', 'openid', 'phone', 'completed']
+    list_display = ['id', 'test_paper', 'user', 'openid', 'phone', 'completed']
+    list_display_links = ['id', 'test_paper', 'user']
+    inlines = [
+      OptionInline
+    ]
+
+
+class OptionAdmin(admin.ModelAdmin):
+    fields = ['servey_result', 'subject', 'opt', 'opt_score']
+    list_display = ['id', 'servey_result', 'subject', 'opt', 'opt_score']
+    list_display_links = ['id']
+
+
 admin.site.register(TestPaper, TestPaperAdmin)
 admin.site.register(LargeClass, LargeClassAdmin)
 admin.site.register(SubClass, SubClassAdmin)
 admin.site.register(ScoreInterval, ScoreIntervalAdmin)
 admin.site.register(Subject, SubjectAdmin)
+admin.site.register(SurveyResult, SurveyResultAdmin)
+admin.site.register(Option, OptionAdmin)

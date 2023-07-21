@@ -1,11 +1,14 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django_filters import rest_framework as filters
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import permissions
+from rest_framework import permissions, viewsets, mixins
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.views import APIView
 from wechatpy import WeChatClient
+
+from LearningAssess.settings import MINI_PROGRAM
+from apps.wechat.models import User
+from apps.wechat.serializers import UserSerializer
 
 
 # Create your views here.
@@ -23,20 +26,34 @@ from wechatpy import WeChatClient
 @permission_classes([permissions.AllowAny])
 def login(request):
     code = request.data.get('code')
-    client = WeChatClient('wx337b946a0050fe3c', 'd66a7e7b7afa2874ce6a13bf2b6898c3')
-    # ass_token = client.fetch_access_token()
-    data = client.wxa.code_to_session(code)
-    # user = client.user.get(data.get('openid'))
-    return JsonResponse({"openid": data.get('openid')})
+    try:
+        client = WeChatClient(MINI_PROGRAM['AppID'], MINI_PROGRAM['AppSecret'])
+        data = client.wxa.code_to_session(code)
+    except Exception as e:
+        return JsonResponse(
+            {
+                'status': 1,
+                'msg': 'failed',
+                'data': {"err": e.__str__()}
+            }
+        )
+
+    return JsonResponse(
+        {
+            'status': 0,
+            'msg': 'success',
+            'data': {"openid": data.get('openid')}
+        }
+    )
 
 
-# class Login(APIView):
-#     authentication_classes = []
-#     permission_classes = [permissions.AllowAny]
-#
-#     def post(self, request, format=None):
-#         """
-#         Return a list of all users.
-#         """
-#         usernames = [user.username for user in User.objects.all()]
-#         return Response(usernames)
+class UserViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('openid', 'phone')
+
