@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./static:/public/static:ro
+    ports:
+      - "8181:80"
