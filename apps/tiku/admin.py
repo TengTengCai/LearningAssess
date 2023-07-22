@@ -43,7 +43,7 @@ class ScoreIntervalAdmin(admin.ModelAdmin):
 
 class SubjectAdmin(admin.ModelAdmin):
     fields = [
-        'test_paper', 'large_class', 'sub_class', 'topic', 'a_ans', 'a_score',
+        'test_paper', 'large_class', 'sub_class', 'order', 'topic', 'a_ans', 'a_score',
         'b_ans', 'b_score', 'c_ans', 'c_score', 'd_ans', 'd_score', 'e_ans', 'e_score']
     list_display = ['id', 'test_paper', 'large_class', 'sub_class', 'topic']
     list_display_links = ['id', 'topic']
