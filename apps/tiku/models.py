@@ -64,7 +64,7 @@ class Subject(BaseModel):
         LargeClass, verbose_name='所属大类', on_delete=models.CASCADE, help_text='大类目')
     sub_class = models.ForeignKey(
         SubClass, verbose_name='所属小类', on_delete=models.CASCADE, help_text='小类目')
-    order = models.IntegerField(verbose_name='序号', help_text='题目序号')
+    order = models.IntegerField(verbose_name='序号', default=0, help_text='题目序号')
     topic = models.TextField(verbose_name='题目', help_text='题目')
     a_ans = models.CharField(verbose_name='A选项', max_length=128, default='A.根本不是这样', help_text='A选项')
     a_score = models.IntegerField(verbose_name='A选项分数', default=1, null=True, blank=True)
