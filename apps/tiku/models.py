@@ -86,14 +86,29 @@ class Subject(BaseModel):
 
 
 class SurveyResult(BaseModel):
+    class SchoolLevel(models.TextChoices):
+        LQB = "LQB", _("清北")
+        L985 = "L985", _("985")
+        L211 = "L211", _("211")
+        LONE = "LONE", _("一本")
+        LTWO = "LTWO", _("二本以下")
     test_paper = models.ForeignKey(TestPaper, verbose_name='测试试卷', on_delete=models.CASCADE, help_text='测试试卷')
-    user = models.ForeignKey(User, verbose_name='用户', on_delete=models.DO_NOTHING, help_text='用户')
+    user = models.ForeignKey(
+        User, verbose_name='用户', null=True, blank=True, on_delete=models.DO_NOTHING, help_text='用户')
     openid = models.CharField(max_length=128, help_text='小程序中的openid')
     phone = models.CharField(verbose_name='手机号', max_length=11, help_text='用户手机号')
+    college_score = models.FloatField(
+        verbose_name='预估分数', default=0, null=True, blank=True, help_text='高考预估分数')
+    school_level = models.CharField(
+        verbose_name='预估院校档次',
+        max_length=4,
+        null=True, blank=True,
+        choices=SchoolLevel.choices)
     completed = models.BooleanField(verbose_name='是否完成答题', default=False)
+    results_json = models.JSONField(verbose_name='问卷结果', null=True, blank=True, help_text='分数统计的结果')
 
     def __str__(self):
-        return f'{self.test_paper}-{self.user.name}'
+        return f'{self.test_paper}-{self.user}'
 
     class Meta:
         verbose_name_plural = '答题卡'

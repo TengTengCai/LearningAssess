@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from apps.tiku.models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
 
-
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
@@ -41,10 +40,19 @@ class ScoreIntervalSerializer(serializers.ModelSerializer):
 
 
 class OptionSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+
     class Meta:
         model = Option
         # fields = ['id', 'sub_class', 'min_score', 'max_score', 'description']
         fields = '__all__'
+
+
+class OptionPartialUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
+        fields = ['servey_result', 'subject', 'opt', 'opt_score']
+        # fields = '__all__'
 
 
 class SurveyResultSerializer(serializers.ModelSerializer):
@@ -56,4 +64,7 @@ class SurveyResultSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
+class SurveyResultCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyResult
+        fields = ['test_paper', 'openid', 'phone', 'college_score', 'school_level']

@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django_filters import rest_framework as filters
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import permissions, viewsets, mixins
+from rest_framework import permissions, viewsets, mixins, status
 from rest_framework.decorators import api_view, permission_classes
 from wechatpy import WeChatClient
 
@@ -35,7 +35,7 @@ def login(request):
                 'status': 1,
                 'msg': 'failed',
                 'data': {"err": e.__str__()}
-            }
+            }, status=status.HTTP_400_BAD_REQUEST
         )
 
     return JsonResponse(

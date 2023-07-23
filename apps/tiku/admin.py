@@ -50,8 +50,8 @@ class SubjectAdmin(admin.ModelAdmin):
 
 
 class SurveyResultAdmin(admin.ModelAdmin):
-    fields = ['test_paper', 'user', 'openid', 'phone', 'completed']
-    list_display = ['id', 'test_paper', 'user', 'openid', 'phone', 'completed']
+    fields = ['test_paper', 'user', 'openid', 'phone', 'college_score', 'school_level', 'completed']
+    list_display = ['id', 'test_paper', 'user', 'openid', 'phone', 'college_score', 'school_level', 'completed']
     list_display_links = ['id', 'test_paper', 'user']
     inlines = [
       OptionInline
