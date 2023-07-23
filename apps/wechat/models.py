@@ -15,9 +15,6 @@ class User(BaseModel):
     age = models.IntegerField(verbose_name='年龄', help_text='用户年龄')
     grade = models.CharField(verbose_name='年级', max_length=32, help_text='用户年龄')
     phone = models.CharField(verbose_name='手机号', unique=True, max_length=11, help_text='用户手机号')
-    group_number = models.CharField(
-        verbose_name='群号', max_length=128, default='', null=True, blank=True,
-        help_text='你所在群的群号（1群请填1，以此类推）')
 
     def __str__(self):
         return f"{self.name}_{self.phone}"

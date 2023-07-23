@@ -48,8 +48,8 @@ class SubClass(BaseModel):
 
 class ScoreInterval(BaseModel):
     sub_class = models.ForeignKey(SubClass, verbose_name='小类目', on_delete=models.CASCADE, help_text='小类目')
-    min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值', default=0)
-    max_score = models.IntegerField(verbose_name='最大值分数', help_text='最大值', default=100)
+    min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
+    max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
 
     class Meta:
@@ -128,6 +128,7 @@ class Option(BaseModel):
         verbose_name='当前选项',
         max_length=8,
         choices=OPT.choices,
+        default="",
         null=True, blank=True
     )
     opt_score = models.IntegerField(verbose_name='选项分数', default=0, null=True, blank=True)

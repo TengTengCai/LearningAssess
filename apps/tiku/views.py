@@ -1,10 +1,12 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Sum, Count, F
 from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse, JsonResponse
 from django_filters import rest_framework as filters
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -72,7 +74,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
     serializer_class = SurveyResultSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('openid', 'phone')
+    filterset_fields = ('openid', 'phone', 'completed')
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -85,7 +87,8 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         openid = serializer.validated_data.get('openid')
         test_paper = serializer.validated_data.get('test_paper')
-        if SurveyResult.objects.filter(openid=openid, test_paper=test_paper, completed=False).exists():
+        phone = serializer.validated_data.get('phone')
+        if SurveyResult.objects.filter(openid=openid, phone=phone, test_paper=test_paper, completed=False).exists():
             survey_result = SurveyResult.objects.filter(openid=openid, test_paper=test_paper, completed=False).first()
             serializer = SurveyResultSerializer(survey_result)
         else:
@@ -113,10 +116,65 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     servey_result=serializer.instance,
                     subject=subject).save()
 
-        @action(methods=['get'], detail=False, url_path='complete')
-        def complete(self, request, *args, **kwargs):
-            dd = {"w": "ww", "ee": "ttt"}
-            return Response(dd)
+    @swagger_auto_schema(methods=['GET'], responses={200: SurveyResultSerializer})
+    @action(methods=['GET'], detail=False, url_path=r'complete/(?P<id>\w+)')
+    def complete(self, request, *args, **kwargs):
+        try:
+            instance: SurveyResult = self.queryset.get(pk=kwargs['id'])
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                    'status': 1,
+                    'msg': '该问卷不存在，请先确认id是否正确'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if instance.completed:
+            return JsonResponse({
+                    'status': 1,
+                    'msg': '该问卷已经完成，请不要重复完成'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        large_class_sum = Option.objects.filter(
+            servey_result=instance
+        ).values(large_class_id=F('subject__large_class')).annotate(
+            opt_score=Sum('opt_score')
+        )
+        large_class_list = []
+        for item_1 in large_class_sum:
+            large_class_id = item_1.get('large_class_id')
+            opt_score = item_1.get('opt_score')
+            large_class: LargeClass = LargeClass.objects.get(pk=large_class_id)
+            sub_class_sum = Option.objects.filter(
+                servey_result=instance,
+                subject__large_class=large_class
+            ).values(sub_class_id=F('subject__sub_class')).annotate(
+                opt_score=Sum('opt_score')
+            )
+            sub_class_list = []
+            for item_2 in sub_class_sum:
+                sub_class_id = item_2.get('sub_class_id')
+                opt_score = item_2.get('opt_score')
+                sub_class: SubClass = SubClass.objects.get(pk=sub_class_id)
+                score_interval: ScoreInterval = ScoreInterval.objects.filter(
+                    sub_class=sub_class,
+                    min_score__lte=opt_score, max_score__gt=opt_score
+                ).first()
+                sub_class_list.append({
+                    "sub_class_id": sub_class_id,
+                    "sub_class_name": sub_class.class_name,
+                    "score": opt_score,
+                    "description": score_interval.description
+                })
+            large_class_list.append({
+                "large_class_id": large_class_id,
+                "large_class_name": large_class.class_name,
+                "score": opt_score,
+                "sub_class_list": sub_class_list
+            })
+
+        instance.completed = True
+        instance.results_json = large_class_list
+        instance.save()
+        serializer = SurveyResultSerializer(instance)
+
+        return JsonResponse(serializer.data)
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -136,13 +194,15 @@ class OptionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
-        if self.action in ['partial_update']:
+        if self.action in ['update']:
             return OptionPartialUpdateSerializer
         else:
             return self.serializer_class
 
     def perform_update(self, serializer):
         option = serializer.instance
+        if option.servey_result.completed:
+            raise serializers.ValidationError('该选项的问卷已经完成了，无法继续修改。')
         opt = serializer.validated_data.get('opt')
         if opt is not None:
             serializer.validated_data['opt_score'] = option.subject.__getattribute__(self.key_map.get(opt))

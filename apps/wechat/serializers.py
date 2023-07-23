@@ -6,4 +6,5 @@ from apps.wechat.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['openid', 'name', 'sex', 'age', 'grade', 'phone']
+        # fields = '__all__'
