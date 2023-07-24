@@ -81,8 +81,8 @@ class Subject(BaseModel):
         return f'{self.order}-{self.topic}'
 
     class Meta:
-        verbose_name_plural = '题目'
-        db_table_comment = "题目"
+        verbose_name_plural = '测试试卷题目'
+        db_table_comment = "测试试卷题目"
 
 
 class SurveyResult(BaseModel):
@@ -134,5 +134,5 @@ class Option(BaseModel):
     opt_score = models.IntegerField(verbose_name='选项分数', default=0, null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = '选项'
-        db_table_comment = "用户选项"
+        verbose_name_plural = '答题卡选项'
+        db_table_comment = "答题卡选项"
