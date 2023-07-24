@@ -136,6 +136,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         ).values(large_class_id=F('subject__large_class')).annotate(
             opt_score=Sum('opt_score')
         )
+        # TODO: 这里还需要更详细的统计
         large_class_list = []
         for item_1 in large_class_sum:
             large_class_id = item_1.get('large_class_id')
