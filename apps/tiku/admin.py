@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.http import HttpResponse
+from openpyxl.workbook import Workbook
 
 from .models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
 
@@ -53,9 +55,28 @@ class SurveyResultAdmin(admin.ModelAdmin):
     fields = ['test_paper', 'user', 'openid', 'phone', 'college_score', 'school_level', 'completed']
     list_display = ['id', 'test_paper', 'user', 'openid', 'phone', 'college_score', 'school_level', 'completed']
     list_display_links = ['id', 'test_paper', 'user']
+    list_filter = ('completed',)
     inlines = [
       OptionInline
     ]
+
+    # def export_survey_result_excel(self, request, queryset):
+    #     meta = self.model._meta  # 用于定义文件名, 格式为: app名.模型类名
+    #     field_names = [field.name for field in meta.fields]  # 模型所有字段名
+    #
+    #     response = HttpResponse(content_type='application/msexcel')  # 定义响应内容类型
+    #     response['Content-Disposition'] = f'attachment; filename={meta}.xlsx'  # 定义响应数据格式
+    #     wb = Workbook()  # 新建Workbook
+    #     ws = wb.active  # 使用当前活动的Sheet表
+    #     ws.append(field_names)  # 将模型字段名作为标题写入第一行
+    #     for obj in queryset:  # 遍历选择的对象列表
+    #         for field in field_names:
+    #             data = [f'{getattr(obj, field)}' for field in field_names]  # 将模型属性值的文本格式组成列表
+    #         row = ws.append(data)  # 写入模型属性值
+    #     wb.save(response)  # 将数据存入响应内容
+    #     return response
+    #     pass
+    # actions = [export_survey_result_excel]
 
 
 class OptionAdmin(admin.ModelAdmin):

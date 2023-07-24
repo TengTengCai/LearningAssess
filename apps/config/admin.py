@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.config.models import CourseInfo, Config
+from apps.config.models import CourseInfo, Config, Article
 
 
 class ConfigAdmin(admin.ModelAdmin):
@@ -32,5 +32,12 @@ class CourseInfoAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'title']
 
 
+class ArticleAdmin(admin.ModelAdmin):
+    fields = ['title', 'description', 'image', 'a_type', 'url']
+    list_display = ['id', 'title', 'description', 'image', 'a_type', 'url']
+    list_display_links = ['id', 'title', 'a_type']
+
+
 admin.site.register(Config, ConfigAdmin)
 admin.site.register(CourseInfo, CourseInfoAdmin)
+admin.site.register(Article, ArticleAdmin)

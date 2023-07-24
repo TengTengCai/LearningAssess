@@ -4,8 +4,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
 
-from apps.config.models import CourseInfo, Config
-from apps.config.serializers import CourseInfoSerializer, ConfigSerializer
+from apps.config.models import CourseInfo, Config, Article
+from apps.config.serializers import CourseInfoSerializer, ConfigSerializer, ArticleSerializer
 
 
 # Create your views here.
@@ -28,3 +28,12 @@ class CourseInfoViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     # pagination_class = MyPageNumberPagination
     # filter_backends = (filters.DjangoFilterBackend,)
     # filterset_fields = ('openid', 'phone')
+
+
+class ArticleViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [permissions.AllowAny]

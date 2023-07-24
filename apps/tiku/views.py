@@ -74,7 +74,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
     serializer_class = SurveyResultSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('openid', 'phone', 'completed')
+    filterset_fields = ('openid', 'completed')
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -124,12 +124,12 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         except ObjectDoesNotExist:
             return JsonResponse({
                     'status': 1,
-                    'msg': '该问卷不存在，请先确认id是否正确'
+                    'msg': '该测试不存在，请先确认id是否正确'
                 }, status=status.HTTP_400_BAD_REQUEST)
         if instance.completed:
             return JsonResponse({
                     'status': 1,
-                    'msg': '该问卷已经完成，请不要重复完成'
+                    'msg': '该测试已经完成，请不要重复提交'
                 }, status=status.HTTP_400_BAD_REQUEST)
         large_class_sum = Option.objects.filter(
             servey_result=instance
