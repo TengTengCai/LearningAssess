@@ -40,9 +40,9 @@ class CourseInfo(BaseModel):
 
 class Article(BaseModel):
     class ArticleType(models.TextChoices):
-        LQB = "curation", _("精选")
-        L985 = "history", _("历史")
-        L211 = "community", _("社区推荐")
+        CUR = "curation", _("精选")
+        HIS = "history", _("历史")
+        COM = "community", _("社区推荐")
     title = models.CharField(max_length=256, verbose_name='标题', help_text='标题')
     a_type = models.CharField(
         max_length=16, choices=ArticleType.choices, verbose_name='类型', help_text='类型')

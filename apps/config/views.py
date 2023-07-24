@@ -2,6 +2,7 @@ from django.http import JsonResponse
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets, permissions
+from django_filters import rest_framework as filters
 from rest_framework.decorators import api_view, permission_classes
 
 from apps.config.models import CourseInfo, Config, Article
@@ -37,3 +38,5 @@ class ArticleViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [permissions.AllowAny]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('a_type',)

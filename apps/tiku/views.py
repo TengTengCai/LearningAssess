@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, F
 from django.shortcuts import render
 
 # Create your views here.

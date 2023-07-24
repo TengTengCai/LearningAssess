@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.tiku',
     'apps.wechat',
     'apps.config',
+    'apps.index',
 ]
 
 MIDDLEWARE = [

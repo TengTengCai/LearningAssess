@@ -7,7 +7,7 @@ from apps.config.models import CourseInfo, Config, Article
 class ConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = Config
-        fields = ['xetong_address']
+        fields = ['index_image', 'xetong_address', 'shop_address', 'evaluation_image']
 
 
 class CourseInfoSerializer(serializers.ModelSerializer):

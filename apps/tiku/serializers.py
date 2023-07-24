@@ -68,3 +68,10 @@ class SurveyResultCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurveyResult
         fields = ['test_paper', 'openid', 'phone', 'college_score', 'school_level']
+
+
+class SurveyResultListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyResult
+        # fields = ['id', 'sub_class', 'min_score', 'max_score', 'description']
+        fields = '__all__'
