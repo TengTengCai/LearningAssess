@@ -164,12 +164,17 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     sub_class=sub_class,
                     min_score__lte=sub_score, max_score__gt=sub_score
                 ).first()
+                all_sub_interval = SubScoreInterval.objects.filter(sub_class=sub_class).all()
+                grade_note_list = []
+                for item3 in all_sub_interval:
+                    grade_note_list.append(f"{item3.min_score}-{item3.max_score}属于{item3.grade}")
                 sub_class_list.append({
                     "sub_class_id": sub_class_id,
                     "sub_class_name": sub_class.class_name,
                     "sub_total_score": sub_class.total_score,
                     "sub_result_score": sub_score,
                     "sub_class_grade": sub_score_interval.grade,
+                    "sub_class_grade_note": '，'.join(grade_note_list),
                     "description": sub_score_interval.description
                 })
             large_class_list.append({
