@@ -10,9 +10,10 @@ from rest_framework import viewsets, permissions, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.tiku.models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
+from apps.tiku.models import TestPaper, LargeClass, SubClass, TotalScoreInterval, LargeScoreInterval, \
+    SubScoreInterval, Subject, SurveyResult, Option
 from apps.tiku.serializers import TestPaperSerializer, LargeClassSerializer, SubClassSerializer, \
-    ScoreIntervalSerializer, SubjectSerializer, SurveyResultSerializer, OptionSerializer, SurveyResultCreateSerializer, \
+    SubjectSerializer, SurveyResultSerializer, OptionSerializer, SurveyResultCreateSerializer, \
     OptionPartialUpdateSerializer
 from apps.wechat.models import User
 
@@ -45,15 +46,6 @@ class SubClassViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = SubClass.objects.all()
     serializer_class = SubClassSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-class ScoreIntervalViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = ScoreInterval.objects.all()
-    serializer_class = ScoreIntervalSerializer
     permission_classes = [permissions.AllowAny]
 
 
@@ -136,11 +128,22 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         ).values(large_class_id=F('subject__large_class')).annotate(
             opt_score=Sum('opt_score')
         )
-        # TODO: 这里还需要更详细的统计
+        total_result_score = instance.option_set.values('opt_score').aggregate(Sum('opt_score')).get('opt_score__sum')
+
+        total_score_interval: TotalScoreInterval = TotalScoreInterval.objects.filter(
+            test_paper=instance.test_paper,
+            min_score__lte=total_result_score, max_score__gt=total_result_score
+        ).first()
+        result_dict = {
+            "total_score": instance.test_paper.total_score,
+            "result_score": total_result_score,
+            "total_grade": total_score_interval.grade,
+            "total_description": total_score_interval.description
+        }
         large_class_list = []
         for item_1 in large_class_sum:
             large_class_id = item_1.get('large_class_id')
-            opt_score = item_1.get('opt_score')
+            large_result_score = item_1.get('opt_score')
             large_class: LargeClass = LargeClass.objects.get(pk=large_class_id)
             sub_class_sum = Option.objects.filter(
                 servey_result=instance,
@@ -148,30 +151,39 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             ).values(sub_class_id=F('subject__sub_class')).annotate(
                 opt_score=Sum('opt_score')
             )
+            large_score_interval: LargeScoreInterval = LargeScoreInterval.objects.filter(
+                large_class=large_class,
+                min_score__lte=large_result_score, max_score__gt=large_result_score
+            ).first()
             sub_class_list = []
             for item_2 in sub_class_sum:
                 sub_class_id = item_2.get('sub_class_id')
-                opt_score = item_2.get('opt_score')
+                sub_score = item_2.get('opt_score')
                 sub_class: SubClass = SubClass.objects.get(pk=sub_class_id)
-                score_interval: ScoreInterval = ScoreInterval.objects.filter(
+                sub_score_interval: SubScoreInterval = SubScoreInterval.objects.filter(
                     sub_class=sub_class,
-                    min_score__lte=opt_score, max_score__gt=opt_score
+                    min_score__lte=sub_score, max_score__gt=sub_score
                 ).first()
                 sub_class_list.append({
                     "sub_class_id": sub_class_id,
                     "sub_class_name": sub_class.class_name,
-                    "score": opt_score,
-                    "description": score_interval.description
+                    "sub_total_score": sub_class.total_score,
+                    "sub_result_score": sub_score,
+                    "sub_class_grade": sub_score_interval.grade,
+                    "description": sub_score_interval.description
                 })
             large_class_list.append({
                 "large_class_id": large_class_id,
                 "large_class_name": large_class.class_name,
-                "score": opt_score,
+                "large_total_score": large_class.total_score,
+                "large_result_score": large_result_score,
+                "large_class_grade": large_score_interval.grade,
+                "description": large_score_interval.description,
                 "sub_class_list": sub_class_list
             })
-
+        result_dict['detail'] = large_class_list
         instance.completed = True
-        instance.results_json = large_class_list
+        instance.results_json = result_dict
         instance.save()
         serializer = SurveyResultSerializer(instance)
 

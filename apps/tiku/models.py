@@ -8,6 +8,7 @@ from utils.base_model import BaseModel
 # Create your models here.
 class TestPaper(BaseModel):
     paper_name = models.CharField(verbose_name='测试名称', max_length=128, help_text='测试名称')
+    total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
     description = models.TextField(verbose_name='说明', null=True, blank=True, help_text='说明')
 
     def __str__(self):
@@ -22,6 +23,7 @@ class LargeClass(BaseModel):
     test_paper = models.ForeignKey(
         TestPaper, verbose_name='测试试卷',  on_delete=models.CASCADE, help_text='测试试卷')
     class_name = models.CharField(verbose_name='大类名称', max_length=64, help_text='大类名称')
+    total_score = models.IntegerField(verbose_name='大类总分数', default=100, null=True, blank=True)
     description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
 
     def __str__(self):
@@ -36,6 +38,7 @@ class SubClass(BaseModel):
     large_class = models.ForeignKey(
         LargeClass, verbose_name='大类目', on_delete=models.CASCADE, help_text='大类目')
     class_name = models.CharField(verbose_name='小类名称', max_length=64, help_text='小类名称')
+    total_score = models.IntegerField(verbose_name='小类总分数', default=100, null=True, blank=True)
     description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
 
     def __str__(self):
@@ -46,15 +49,41 @@ class SubClass(BaseModel):
         db_table_comment = "小类目"
 
 
-class ScoreInterval(BaseModel):
-    sub_class = models.ForeignKey(SubClass, verbose_name='小类目', on_delete=models.CASCADE, help_text='小类目')
+class TotalScoreInterval(BaseModel):
+    test_paper = models.ForeignKey(
+        TestPaper, verbose_name='测试试卷', on_delete=models.CASCADE, help_text='测试试卷')
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
-    max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
+    max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=1000)
+    grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
     description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = '小类分数区间'
-        db_table_comment = "分数区间"
+        verbose_name_plural = '分数区间-总分'
+        db_table_comment = "分数区间-总分"
+
+
+class LargeScoreInterval(BaseModel):
+    large_class = models.ForeignKey(LargeClass, verbose_name='小类目', on_delete=models.CASCADE, help_text='小类目')
+    min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
+    max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
+    grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = '分数区间-大类'
+        db_table_comment = "分数区间-大类"
+
+
+class SubScoreInterval(BaseModel):
+    sub_class = models.ForeignKey(SubClass, verbose_name='小类目', on_delete=models.CASCADE, help_text='小类目')
+    min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
+    max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
+    grade = models.CharField(verbose_name='评级',  max_length=32, help_text='评级', default='', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = '分数区间-小类'
+        db_table_comment = "分数区间-小类"
 
 
 class Subject(BaseModel):

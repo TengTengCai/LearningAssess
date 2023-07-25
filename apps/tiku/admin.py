@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.http import HttpResponse
 from openpyxl.workbook import Workbook
 
-from .models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
+from .models import TestPaper, LargeClass, SubClass, TotalScoreInterval, LargeScoreInterval, SubScoreInterval, \
+    Subject, SurveyResult, Option
 
 
 # Register your models here.
@@ -37,8 +38,20 @@ class SubClassAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'class_name', 'description']
 
 
-class ScoreIntervalAdmin(admin.ModelAdmin):
-    fields = ['sub_class', 'min_score', 'max_score', 'description']
+class TotalScoreIntervalAdmin(admin.ModelAdmin):
+    fields = ['test_paper', 'min_score', 'max_score', 'grade', 'description']
+    list_display = ['id', 'test_paper', 'min_score', 'max_score', 'grade', 'description']
+    list_display_links = ['id', 'test_paper']
+
+
+class LargeScoreIntervalAdmin(admin.ModelAdmin):
+    fields = ['large_class', 'min_score', 'max_score', 'grade', 'description']
+    list_display = ['id', 'large_class', 'min_score', 'max_score', 'grade', 'description']
+    list_display_links = ['id', 'large_class']
+
+
+class SubScoreIntervalAdmin(admin.ModelAdmin):
+    fields = ['sub_class', 'min_score', 'max_score', 'grade', 'description']
     list_display = ['id', 'sub_class', 'min_score', 'max_score', 'description']
     list_display_links = ['id', 'sub_class']
 
@@ -88,7 +101,9 @@ class OptionAdmin(admin.ModelAdmin):
 admin.site.register(TestPaper, TestPaperAdmin)
 admin.site.register(LargeClass, LargeClassAdmin)
 admin.site.register(SubClass, SubClassAdmin)
-admin.site.register(ScoreInterval, ScoreIntervalAdmin)
+admin.site.register(TotalScoreInterval, TotalScoreIntervalAdmin)
+admin.site.register(LargeScoreInterval, LargeScoreIntervalAdmin)
+admin.site.register(SubScoreInterval, SubScoreIntervalAdmin)
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(SurveyResult, SurveyResultAdmin)
 admin.site.register(Option, OptionAdmin)

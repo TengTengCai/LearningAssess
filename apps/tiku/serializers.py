@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from apps.tiku.models import TestPaper, LargeClass, SubClass, ScoreInterval, Subject, SurveyResult, Option
+from apps.tiku.models import TestPaper, LargeClass, SubClass, Subject, SurveyResult, Option
+
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,11 +33,11 @@ class SubClassSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ScoreIntervalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ScoreInterval
-        # fields = ['id', 'sub_class', 'min_score', 'max_score', 'description']
-        fields = '__all__'
+# class ScoreIntervalSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ScoreInterval
+#         # fields = ['id', 'sub_class', 'min_score', 'max_score', 'description']
+#         fields = '__all__'
 
 
 class OptionSerializer(serializers.ModelSerializer):
