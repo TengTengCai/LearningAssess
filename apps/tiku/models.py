@@ -9,7 +9,7 @@ from utils.base_model import BaseModel
 class TestPaper(BaseModel):
     paper_name = models.CharField(verbose_name='测试名称', max_length=128, help_text='测试名称')
     total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
-    description = models.TextField(verbose_name='说明', null=True, blank=True, help_text='说明')
+    description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
 
     def __str__(self):
         return self.paper_name
@@ -24,7 +24,7 @@ class LargeClass(BaseModel):
         TestPaper, verbose_name='测试试卷',  on_delete=models.CASCADE, help_text='测试试卷')
     class_name = models.CharField(verbose_name='大类名称', max_length=64, help_text='大类名称')
     total_score = models.IntegerField(verbose_name='大类总分数', default=100, null=True, blank=True)
-    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     def __str__(self):
         return self.class_name
@@ -39,7 +39,7 @@ class SubClass(BaseModel):
         LargeClass, verbose_name='大类目', on_delete=models.CASCADE, help_text='大类目')
     class_name = models.CharField(verbose_name='小类名称', max_length=64, help_text='小类名称')
     total_score = models.IntegerField(verbose_name='小类总分数', default=100, null=True, blank=True)
-    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     def __str__(self):
         return self.class_name
@@ -55,7 +55,7 @@ class TotalScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=1000)
     grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-总分'
@@ -67,7 +67,7 @@ class LargeScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-大类'
@@ -79,7 +79,7 @@ class SubScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     grade = models.CharField(verbose_name='评级',  max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', help_text='说明', null=True, blank=True)
+    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-小类'
@@ -130,11 +130,12 @@ class SurveyResult(BaseModel):
         verbose_name='预估分数', default=0, null=True, blank=True, help_text='高考预估分数')
     school_level = models.CharField(
         verbose_name='预估院校档次',
+        default=SchoolLevel.LQB,
         max_length=4,
         null=True, blank=True,
         choices=SchoolLevel.choices)
     completed = models.BooleanField(verbose_name='是否完成答题', default=False)
-    results_json = models.JSONField(verbose_name='问卷结果', null=True, blank=True, help_text='分数统计的结果')
+    results_json = models.JSONField(verbose_name='问卷结果', default=dict, null=True, blank=True, help_text='分数统计的结果')
 
     def __str__(self):
         return f'{self.test_paper}-{self.user}'

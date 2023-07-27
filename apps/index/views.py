@@ -20,13 +20,13 @@ class IndexView(APIView):
     @swagger_auto_schema()
     def get(self, request, format=None):
         config_obj = Config.objects.first()
-        config_serializer = ConfigSerializer(config_obj)
+        config_serializer = ConfigSerializer(config_obj, context={'request': request})
 
         course_info_obj = CourseInfo.objects.all()
-        course_info_serializer = CourseInfoSerializer(course_info_obj, many=True)
+        course_info_serializer = CourseInfoSerializer(course_info_obj, many=True, context={'request': request})
 
         article_obj = Article.objects.filter(a_type=Article.ArticleType.CUR).all()
-        article_serializer = ArticleSerializer(article_obj, many=True)
+        article_serializer = ArticleSerializer(article_obj, many=True, context={'request': request})
         content = {
             'config': config_serializer.data,
             'course_info': course_info_serializer.data,
@@ -47,10 +47,10 @@ class ProfileView(APIView):
         sr_serializer = SurveyResultListSerializer(sr_obj, many=True)
 
         his_article_obj = Article.objects.filter(a_type=Article.ArticleType.HIS).all()
-        his_article_serializer = ArticleSerializer(his_article_obj, many=True)
+        his_article_serializer = ArticleSerializer(his_article_obj, many=True, context={'request': request})
 
         com_article_obj = Article.objects.filter(a_type=Article.ArticleType.COM).all()
-        com_article_serializer = ArticleSerializer(com_article_obj, many=True)
+        com_article_serializer = ArticleSerializer(com_article_obj, many=True, context={'request': request})
         content = {
             'survey_result': sr_serializer.data,
             'his_article': his_article_serializer.data,

@@ -15,7 +15,7 @@ from apps.config.serializers import CourseInfoSerializer, ConfigSerializer, Arti
 @permission_classes([permissions.AllowAny])
 def config(request):
     config_obj = Config.objects.first()
-    serializer = ConfigSerializer(config_obj)
+    serializer = ConfigSerializer(config_obj, context={'request': request})
     return JsonResponse(serializer.data)
 
 
