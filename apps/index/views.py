@@ -10,6 +10,8 @@ from apps.config.serializers import ConfigSerializer, CourseInfoSerializer, Arti
 from apps.index.serializers import ProfileQuerySerializer
 from apps.tiku.models import SurveyResult
 from apps.tiku.serializers import SurveyResultListSerializer
+from apps.wechat.models import User
+from apps.wechat.serializers import UserSerializer
 
 
 # Create your views here.
@@ -41,7 +43,7 @@ class ProfileView(APIView):
     # noinspection PyTypeChecker
     @swagger_auto_schema(query_serializer=ProfileQuerySerializer)
     def get(self, request, format=None):
-        openid = request.data.get('openid')
+        openid = request.query_params.get('openid')
 
         sr_obj = SurveyResult.objects.filter(openid=openid, completed=True).all()
         sr_serializer = SurveyResultListSerializer(sr_obj, many=True)
@@ -51,9 +53,20 @@ class ProfileView(APIView):
 
         com_article_obj = Article.objects.filter(a_type=Article.ArticleType.COM).all()
         com_article_serializer = ArticleSerializer(com_article_obj, many=True, context={'request': request})
+
+        try:
+            user = User.objects.filter(openid=openid).first()
+        except Exception as e:
+            print(e)
+            user_serializer_data = None
+        else:
+            user_serializer = UserSerializer(user)
+            user_serializer_data = user_serializer.data
+
         content = {
             'survey_result': sr_serializer.data,
             'his_article': his_article_serializer.data,
             'com_article': com_article_serializer.data,
+            'user': user_serializer_data,
         }
         return JsonResponse(content)
