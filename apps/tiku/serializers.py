@@ -52,7 +52,7 @@ class OptionSerializer(serializers.ModelSerializer):
 class OptionPartialUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
-        fields = ['servey_result', 'subject', 'opt', 'opt_score']
+        fields = ['opt']
         # fields = '__all__'
 
 
