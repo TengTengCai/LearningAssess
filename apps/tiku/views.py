@@ -135,13 +135,18 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             min_score__lte=total_result_score, max_score__gt=total_result_score
         ).first()
         result_dict = {
+            "nickname": instance.user.name,
+            "user_id": instance.user.id,
             "total_score": instance.test_paper.total_score,
             "result_score": total_result_score,
-            "total_grade": total_score_interval.grade,
-            "total_description": total_score_interval.description
+            "total_grade": '' if total_score_interval is None else total_score_interval.grade,
+            "total_description": '' if total_score_interval is None else total_score_interval.description
         }
+        radar_data_sub_dict = {}
+        radar_data_large_list = []
         large_class_list = []
         for item_1 in large_class_sum:
+            radar_data_sub_list = []
             large_class_id = item_1.get('large_class_id')
             large_result_score = item_1.get('opt_score')
             large_class: LargeClass = LargeClass.objects.get(pk=large_class_id)
@@ -177,6 +182,12 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     "sub_class_grade_note": '，'.join(grade_note_list),
                     "description": sub_score_interval.description
                 })
+                radar_data_sub_list.append({
+                    "id": sub_class_id,
+                    "name": sub_class.class_name,
+                    "max_score": sub_class.total_score,
+                    "score": sub_score,
+                })
             large_class_list.append({
                 "large_class_id": large_class_id,
                 "large_class_name": large_class.class_name,
@@ -186,7 +197,16 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                 "description": large_score_interval.description,
                 "sub_class_list": sub_class_list
             })
+            radar_data_large_list.append({
+                "id": large_class_id,
+                "name": large_class.class_name,
+                "max_score": large_class.total_score,
+                "score": large_result_score,
+            })
+            radar_data_sub_dict[large_class_id] = radar_data_sub_list
         result_dict['detail'] = large_class_list
+        result_dict['radar_large_class'] = radar_data_large_list
+        result_dict['radar_sub_class'] = radar_data_sub_dict
         instance.completed = True
         instance.results_json = result_dict
         instance.save()

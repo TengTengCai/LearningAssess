@@ -64,7 +64,7 @@ class TotalScoreInterval(BaseModel):
 
 
 class LargeScoreInterval(BaseModel):
-    large_class = models.ForeignKey(LargeClass, verbose_name='小类目', on_delete=models.CASCADE, help_text='小类目')
+    large_class = models.ForeignKey(LargeClass, verbose_name='大类目', on_delete=models.CASCADE, help_text='小类目')
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
