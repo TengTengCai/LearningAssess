@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from django.shortcuts import render
 
 # Create your views here.
@@ -14,7 +14,7 @@ from apps.tiku.models import TestPaper, LargeClass, SubClass, TotalScoreInterval
     SubScoreInterval, Subject, SurveyResult, Option
 from apps.tiku.serializers import TestPaperSerializer, LargeClassSerializer, SubClassSerializer, \
     SubjectSerializer, SurveyResultSerializer, OptionSerializer, SurveyResultCreateSerializer, \
-    OptionPartialUpdateSerializer
+    OptionPartialUpdateSerializer, IsCompleteQuerySerializer
 from apps.wechat.models import User
 
 
@@ -193,6 +193,21 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         serializer = SurveyResultSerializer(instance)
 
         return JsonResponse(serializer.data)
+
+    @swagger_auto_schema(methods=['GET'], serializer_or_field=IsCompleteQuerySerializer)
+    @action(methods=['GET'], detail=False, url_path=r'is_complete')
+    def is_complete(self, request, *args, **kwargs):
+        openid = request.query_params.get('openid')
+        try:
+            instance: SurveyResult = self.queryset.filter(openid=openid, completed=False).first()
+        except ObjectDoesNotExist:
+            return
+        if instance is None:
+            return JsonResponse({"status": True, "tests": []}, status=status.HTTP_200_OK)
+        options = instance.option_set.filter((Q(opt="") | Q(opt=None))).all()
+        options_serializer = OptionSerializer(options, many=True)
+
+        return JsonResponse({"status": False, 'tests': options_serializer.data})
 
 
 class OptionViewSet(viewsets.ModelViewSet):

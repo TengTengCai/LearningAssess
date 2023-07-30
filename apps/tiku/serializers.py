@@ -76,3 +76,7 @@ class SurveyResultListSerializer(serializers.ModelSerializer):
         model = SurveyResult
         # fields = ['id', 'sub_class', 'min_score', 'max_score', 'description']
         fields = '__all__'
+
+
+class IsCompleteQuerySerializer(serializers.Serializer):
+    openid = serializers.CharField(required=True)

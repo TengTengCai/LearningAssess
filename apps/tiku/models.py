@@ -9,6 +9,7 @@ from utils.base_model import BaseModel
 class TestPaper(BaseModel):
     paper_name = models.CharField(verbose_name='测试名称', max_length=128, help_text='测试名称')
     total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
+    spend_time = models.IntegerField(verbose_name='预计花费时间(s)', default=120, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
 
     def __str__(self):
