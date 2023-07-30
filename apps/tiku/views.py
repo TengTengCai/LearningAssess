@@ -204,10 +204,18 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             return
         if instance is None:
             return JsonResponse({"status": True, "tests": []}, status=status.HTTP_200_OK)
-        options = instance.option_set.filter((Q(opt="") | Q(opt=None))).all()
+        options = instance.option_set.all()
+        continue_option = instance.option_set.filter((Q(opt="") | Q(opt=None))).order_by('id').first()
+        if continue_option is None:
+            continue_option = instance.option_set.last()
         options_serializer = OptionSerializer(options, many=True)
 
-        return JsonResponse({"status": False, 'tests': options_serializer.data})
+        return JsonResponse(
+            {
+                "status": False, 'tests': options_serializer.data, 'continue_id': continue_option.id
+            },
+            status=status.HTTP_200_OK
+        )
 
 
 class OptionViewSet(viewsets.ModelViewSet):
