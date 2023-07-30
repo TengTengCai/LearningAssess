@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum, F, Q
 from django.shortcuts import render
@@ -137,6 +139,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
         result_dict = {
             "nickname": instance.user.name,
             "user_id": instance.user.id,
+            "complete_time": (datetime.datetime.now() - instance.created).seconds,
             "total_score": instance.test_paper.total_score,
             "result_score": total_result_score,
             "total_grade": '' if total_score_interval is None else total_score_interval.grade,
