@@ -235,7 +235,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
 
         return JsonResponse(
             {
-                "status": False, 'tests': options_serializer.data, 'continue_id': continue_option.id
+                "status": False, 'tests': options_serializer.data, 'id': continue_option.id
             },
             status=status.HTTP_200_OK
         )
