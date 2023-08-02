@@ -6,3 +6,5 @@ services:
     volumes:
       - ./static:/code/static
       - ./media:/code/media
+    ports:
+      - "8000:8000"
