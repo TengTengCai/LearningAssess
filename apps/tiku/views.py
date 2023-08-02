@@ -181,9 +181,9 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     "sub_class_name": sub_class.class_name,
                     "sub_total_score": sub_class.total_score,
                     "sub_result_score": sub_score,
-                    "sub_class_grade": sub_score_interval.grade,
+                    "sub_class_grade": '' if large_score_interval is None else sub_score_interval.grade,
                     "sub_class_grade_note": '，'.join(grade_note_list),
-                    "description": sub_score_interval.description
+                    "description": '' if large_score_interval is None else sub_score_interval.description
                 })
                 radar_data_sub_list.append({
                     "id": sub_class_id,
@@ -196,8 +196,8 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                 "large_class_name": large_class.class_name,
                 "large_total_score": large_class.total_score,
                 "large_result_score": large_result_score,
-                "large_class_grade": large_score_interval.grade,
-                "description": large_score_interval.description,
+                "large_class_grade": '' if large_score_interval is None else large_score_interval.grade,
+                "description": '' if large_score_interval is None else large_score_interval.description,
                 "sub_class_list": sub_class_list
             })
             radar_data_large_list.append({

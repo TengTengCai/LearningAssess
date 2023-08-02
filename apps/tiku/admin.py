@@ -27,15 +27,15 @@ class TestPaperAdmin(admin.ModelAdmin):
 
 
 class LargeClassAdmin(admin.ModelAdmin):
-    fields = ['test_paper', 'class_name', 'description']
-    list_display = ['id', 'test_paper', 'class_name', 'description']
-    list_display_links = ['id', 'class_name', 'description']
+    fields = ['test_paper', 'class_name', 'total_score', 'description']
+    list_display = ['id', 'test_paper', 'class_name', 'total_score', 'description']
+    list_display_links = ['id', 'class_name', 'total_score', 'description']
 
 
 class SubClassAdmin(admin.ModelAdmin):
-    fields = ['large_class', 'class_name', 'description']
-    list_display = ['id', 'large_class', 'class_name', 'description']
-    list_display_links = ['id', 'class_name', 'description']
+    fields = ['large_class', 'class_name', 'total_score', 'description']
+    list_display = ['id', 'large_class', 'class_name', 'total_score', 'description']
+    list_display_links = ['id', 'class_name', 'total_score', 'description']
 
 
 class TotalScoreIntervalAdmin(admin.ModelAdmin):
