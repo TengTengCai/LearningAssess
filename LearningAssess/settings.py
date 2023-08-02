@@ -202,5 +202,8 @@ LOGGING = {
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8181",
     "http://localhost:8181",
-    "http://119.23.111.230:8000/"
+    "http://119.23.111.230:8000",
+    "https://dati.runjiahui.cn",
+    "http://dati.runjiahui.cn",
 ]
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
