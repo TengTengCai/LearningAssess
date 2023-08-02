@@ -3,16 +3,6 @@ services:
   web:
     build: .
     restart: always
-    ports:
-      - "8000:8000"
-
-
-  nginx:
-    image: nginx:latest
-    restart: always
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-#      - ./static:/public/static
-#      - ./media:/public/media
-    ports:
-      - "8181:80"
+      - ./static:/code/static
+      - ./media:/code/media
