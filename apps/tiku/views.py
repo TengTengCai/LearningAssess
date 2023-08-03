@@ -181,9 +181,9 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     "sub_class_name": sub_class.class_name,
                     "sub_total_score": sub_class.total_score,
                     "sub_result_score": sub_score,
-                    "sub_class_grade": '' if large_score_interval is None else sub_score_interval.grade,
+                    "sub_class_grade": '' if sub_score_interval is None else sub_score_interval.grade,
                     "sub_class_grade_note": '，'.join(grade_note_list),
-                    "description": '' if large_score_interval is None else sub_score_interval.description
+                    "description": '' if sub_score_interval is None else sub_score_interval.description
                 })
                 radar_data_sub_list.append({
                     "id": sub_class_id,
