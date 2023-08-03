@@ -124,7 +124,7 @@ class SurveyResult(BaseModel):
         LTWO = "LTWO", _("二本以下")
     test_paper = models.ForeignKey(TestPaper, verbose_name='测试试卷', on_delete=models.CASCADE, help_text='测试试卷')
     user = models.ForeignKey(
-        User, verbose_name='用户', null=True, blank=True, on_delete=models.DO_NOTHING, help_text='用户')
+        User, verbose_name='用户', null=True, blank=True, on_delete=models.SET_NULL, help_text='用户')
     openid = models.CharField(max_length=128, help_text='小程序中的openid')
     phone = models.CharField(verbose_name='手机号', max_length=11, help_text='用户手机号')
     college_score = models.FloatField(
