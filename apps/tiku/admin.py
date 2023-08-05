@@ -18,24 +18,24 @@ class OptionInline(admin.TabularInline):
 
 
 class TestPaperAdmin(admin.ModelAdmin):
-    fields = ['paper_name', 'total_score', 'spend_time', 'description']
-    list_display = ['id', 'paper_name', 'total_score', 'spend_time', 'description']
-    list_display_links = ['id', 'paper_name', 'total_score', 'spend_time', 'description']
+    fields = ['paper_name', 'spend_time', 'description']
+    list_display = ['id', 'paper_name', 'spend_time', 'description']
+    list_display_links = ['id', 'paper_name', 'spend_time', 'description']
     inlines = [
       SubjectInline
     ]
 
 
 class LargeClassAdmin(admin.ModelAdmin):
-    fields = ['test_paper', 'class_name', 'total_score', 'description']
-    list_display = ['id', 'test_paper', 'class_name', 'total_score', 'description']
-    list_display_links = ['id', 'class_name', 'total_score', 'description']
+    fields = ['test_paper', 'class_name', 'description']
+    list_display = ['id', 'test_paper', 'class_name', 'description']
+    list_display_links = ['id', 'class_name', 'description']
 
 
 class SubClassAdmin(admin.ModelAdmin):
-    fields = ['large_class', 'class_name', 'total_score', 'description']
-    list_display = ['id', 'large_class', 'class_name', 'total_score', 'description']
-    list_display_links = ['id', 'class_name', 'total_score', 'description']
+    fields = ['large_class', 'class_name', 'description']
+    list_display = ['id', 'large_class', 'class_name', 'description']
+    list_display_links = ['id', 'class_name', 'description']
 
 
 class TotalScoreIntervalAdmin(admin.ModelAdmin):

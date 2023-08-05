@@ -136,11 +136,12 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             test_paper=instance.test_paper,
             min_score__lte=total_result_score, max_score__gt=total_result_score
         ).first()
+        max_score = instance.test_paper.subject_set.count() * 5
         result_dict = {
             "nickname": instance.user.name,
             "user_id": instance.user.id,
             "complete_time": (datetime.datetime.now() - instance.created).seconds,
-            "total_score": instance.test_paper.total_score,
+            "total_score": max_score,
             "result_score": total_result_score,
             "total_grade": '' if total_score_interval is None else total_score_interval.grade,
             "total_description": '' if total_score_interval is None else total_score_interval.description
@@ -163,6 +164,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                 large_class=large_class,
                 min_score__lte=large_result_score, max_score__gt=large_result_score
             ).first()
+            large_max_class = large_class.subject_set.count() * 5
             sub_class_list = []
             for item_2 in sub_class_sum:
                 sub_class_id = item_2.get('sub_class_id')
@@ -173,13 +175,14 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     min_score__lte=sub_score, max_score__gt=sub_score
                 ).first()
                 all_sub_interval = SubScoreInterval.objects.filter(sub_class=sub_class).all()
+                sub_max_score = sub_class.subject_set.count() * 5
                 grade_note_list = []
                 for item3 in all_sub_interval:
                     grade_note_list.append(f"{item3.min_score}-{item3.max_score}属于{item3.grade}")
                 sub_class_list.append({
                     "sub_class_id": sub_class_id,
                     "sub_class_name": sub_class.class_name,
-                    "sub_total_score": sub_class.total_score,
+                    "sub_total_score": sub_max_score,
                     "sub_result_score": sub_score,
                     "sub_class_grade": '' if sub_score_interval is None else sub_score_interval.grade,
                     "sub_class_grade_note": '，'.join(grade_note_list),
@@ -188,13 +191,13 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                 radar_data_sub_list.append({
                     "id": sub_class_id,
                     "name": sub_class.class_name,
-                    "max_score": sub_class.total_score,
+                    "max_score": sub_max_score,
                     "score": sub_score,
                 })
             large_class_list.append({
                 "large_class_id": large_class_id,
                 "large_class_name": large_class.class_name,
-                "large_total_score": large_class.total_score,
+                "large_total_score": large_max_class,
                 "large_result_score": large_result_score,
                 "large_class_grade": '' if large_score_interval is None else large_score_interval.grade,
                 "description": '' if large_score_interval is None else large_score_interval.description,
@@ -203,7 +206,7 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             radar_data_large_list.append({
                 "id": large_class_id,
                 "name": large_class.class_name,
-                "max_score": large_class.total_score,
+                "max_score": large_max_class,
                 "score": large_result_score,
             })
             radar_data_sub_dict[large_class_id] = radar_data_sub_list

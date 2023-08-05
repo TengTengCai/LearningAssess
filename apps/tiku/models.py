@@ -8,7 +8,7 @@ from utils.base_model import BaseModel
 # Create your models here.
 class TestPaper(BaseModel):
     paper_name = models.CharField(verbose_name='测试名称', max_length=128, help_text='测试名称')
-    total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
+    # total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
     spend_time = models.IntegerField(verbose_name='预计花费时间(s)', default=120, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
 
@@ -24,7 +24,7 @@ class LargeClass(BaseModel):
     test_paper = models.ForeignKey(
         TestPaper, verbose_name='测试试卷',  on_delete=models.CASCADE, help_text='测试试卷')
     class_name = models.CharField(verbose_name='大类名称', max_length=64, help_text='大类名称')
-    total_score = models.IntegerField(verbose_name='大类总分数', default=100, null=True, blank=True)
+    # total_score = models.IntegerField(verbose_name='大类总分数', default=100, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     def __str__(self):
@@ -39,7 +39,7 @@ class SubClass(BaseModel):
     large_class = models.ForeignKey(
         LargeClass, verbose_name='大类目', on_delete=models.CASCADE, help_text='大类目')
     class_name = models.CharField(verbose_name='小类名称', max_length=64, help_text='小类名称')
-    total_score = models.IntegerField(verbose_name='小类总分数', default=100, null=True, blank=True)
+    # total_score = models.IntegerField(verbose_name='小类总分数', default=100, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     def __str__(self):
