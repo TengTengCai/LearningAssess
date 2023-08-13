@@ -15,10 +15,12 @@ class Config(BaseModel):
     index_image = models.ImageField(
         verbose_name='首页大图', default='', null=True, blank=True, help_text='首页顶部大图',
         upload_to=image_upload_to)
-    xetong_address = models.URLField(
-        verbose_name='树成林公众号地址', default='', null=True, blank=True, help_text='首页左侧公众号地址')
-    shop_address = models.URLField(
-        verbose_name='逆袭商店地址', default='', null=True, blank=True, help_text='首页右侧商店地址')
+    xetong_address = models.ImageField(
+        verbose_name='树成林公众号二维码图片地址', default='', null=True, blank=True, help_text='树成林公众号二维码图片地址',
+        upload_to=image_upload_to)
+    shop_address = models.ImageField(
+        verbose_name='逆袭商店二维码图片地址', default='', null=True, blank=True, help_text='逆袭商店二维码图片地址',
+        upload_to=image_upload_to)
     evaluation_image = models.ImageField(
         verbose_name='学习力测评图', default='', null=True, blank=True, help_text='中间部分的学习力测评图',
         upload_to=image_upload_to)

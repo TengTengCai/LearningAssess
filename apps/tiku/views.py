@@ -16,7 +16,7 @@ from apps.tiku.models import TestPaper, LargeClass, SubClass, TotalScoreInterval
     SubScoreInterval, Subject, SurveyResult, Option
 from apps.tiku.serializers import TestPaperSerializer, LargeClassSerializer, SubClassSerializer, \
     SubjectSerializer, SurveyResultSerializer, OptionSerializer, SurveyResultCreateSerializer, \
-    OptionPartialUpdateSerializer, IsCompleteQuerySerializer
+    OptionPartialUpdateSerializer, IsCompleteQuerySerializer, SurveyResultListSerializer
 from apps.wechat.models import User
 
 
@@ -73,6 +73,8 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return SurveyResultCreateSerializer
+        elif self.action == 'list':
+            return SurveyResultListSerializer
         else:
             return self.serializer_class
 

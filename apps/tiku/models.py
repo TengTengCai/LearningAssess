@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -5,12 +7,20 @@ from apps.wechat.models import User
 from utils.base_model import BaseModel
 
 
+def image_upload_to(instance, filename):
+    return '{class_name}/{uuid}/{filename}'.format(
+        class_name=instance.__class__.__name__, uuid=uuid.uuid4().hex, filename=filename)
+
+
 # Create your models here.
 class TestPaper(BaseModel):
     paper_name = models.CharField(verbose_name='测试名称', max_length=128, help_text='测试名称')
     # total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
-    spend_time = models.IntegerField(verbose_name='预计花费时间(s)', default=120, null=True, blank=True)
+    spend_time = models.IntegerField(verbose_name='预计花费时间(min)', default=12, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
+    description_image = models.ImageField(
+        verbose_name='说明图片', default='', null=True, blank=True, help_text='说明图片',
+        upload_to=image_upload_to)
 
     def __str__(self):
         return self.paper_name
