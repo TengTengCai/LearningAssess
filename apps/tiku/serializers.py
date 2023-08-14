@@ -72,8 +72,8 @@ class SurveyResultCreateSerializer(serializers.ModelSerializer):
 
 
 class SurveyResultListSerializer(serializers.ModelSerializer):
-    created = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    updated = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    updated = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
 
     class Meta:
         model = SurveyResult
