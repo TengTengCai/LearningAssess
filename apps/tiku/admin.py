@@ -18,7 +18,7 @@ class OptionInline(admin.TabularInline):
 
 
 class TestPaperAdmin(admin.ModelAdmin):
-    fields = ['paper_name', 'spend_time', 'description']
+    fields = ['paper_name', 'spend_time', 'description', 'desc_url']
     list_display = ['id', 'paper_name', 'spend_time', 'description']
     list_display_links = ['id', 'paper_name', 'spend_time', 'description']
     inlines = [

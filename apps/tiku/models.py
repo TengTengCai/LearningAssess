@@ -19,7 +19,7 @@ class TestPaper(BaseModel):
     # total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
     spend_time = models.IntegerField(verbose_name='预计花费时间(min)', default=12, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
-    description_image = models.ImageField(
+    desc_url = models.ImageField(
         verbose_name='说明图片', default='', null=True, blank=True, help_text='说明图片',
         upload_to=image_upload_to)
 
