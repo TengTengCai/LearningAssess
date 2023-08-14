@@ -36,6 +36,6 @@ def init_db(c):
 
     if Config.objects.all().count() == 0:
         Config(
-            xetong_address='http://example.com',
-            shop_address='http://example.com'
+            xetong_address='',
+            shop_address=''
         ).save()

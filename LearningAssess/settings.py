@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     'rest_framework',
     'django_filters',
     'drf_yasg',
@@ -49,6 +50,8 @@ INSTALLED_APPS = [
     'apps.wechat',
     'apps.config',
     'apps.index',
+    'ckeditor',  # 富文本编辑器
+    'ckeditor_uploader'  # 富文本编辑器上传图片模块
 ]
 
 MIDDLEWARE = [
@@ -62,11 +65,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'LearningAssess.urls'
-
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -207,3 +210,16 @@ CSRF_TRUSTED_ORIGINS = [
     "http://dati.runjiahui.cn",
 ]
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # 工具条功能
+        'height': 300,  # 编辑器高度
+        'width': 800,  # 编辑器宽
+    },
+}
+
+CKEDITOR_UPLOAD_PATH = 'uploads'  # 上传图片保存路径，如果没有图片存储或者使用自定义存储位置，那么则直接写  ' ' ,
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+# 如果是使用django本身的存储方式，那么你就指名一个目录用来存储即可。

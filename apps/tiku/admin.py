@@ -1,6 +1,6 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 from django.contrib import admin
-from django.http import HttpResponse
-from openpyxl.workbook import Workbook
 
 from .models import TestPaper, LargeClass, SubClass, TotalScoreInterval, LargeScoreInterval, SubScoreInterval, \
     Subject, SurveyResult, Option
@@ -38,19 +38,46 @@ class SubClassAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'class_name', 'description']
 
 
+class TotalScoreIntervalAdminForm(forms.ModelForm):
+    description = forms.CharField(label='说明', widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = TotalScoreInterval
+        fields = '__all__'
+
+
 class TotalScoreIntervalAdmin(admin.ModelAdmin):
+    form = TotalScoreIntervalAdminForm
     fields = ['test_paper', 'min_score', 'max_score', 'grade', 'description']
     list_display = ['id', 'test_paper', 'min_score', 'max_score', 'grade', 'description']
     list_display_links = ['id', 'test_paper']
 
 
+class LargeScoreIntervalAdminForm(forms.ModelForm):
+    description = forms.CharField(label='说明', widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = LargeScoreInterval
+        fields = '__all__'
+
+
 class LargeScoreIntervalAdmin(admin.ModelAdmin):
+    form = LargeScoreIntervalAdminForm
     fields = ['large_class', 'min_score', 'max_score', 'grade', 'description']
     list_display = ['id', 'large_class', 'min_score', 'max_score', 'grade', 'description']
     list_display_links = ['id', 'large_class']
 
 
+class SubScoreIntervalAdminForm(forms.ModelForm):
+    description = forms.CharField(label='说明', widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = SubScoreInterval
+        fields = '__all__'
+
+
 class SubScoreIntervalAdmin(admin.ModelAdmin):
+    form = SubScoreIntervalAdminForm
     fields = ['sub_class', 'min_score', 'max_score', 'grade', 'description']
     list_display = ['id', 'sub_class', 'min_score', 'max_score', 'description']
     list_display_links = ['id', 'sub_class']

@@ -1,5 +1,6 @@
 import uuid
 
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -66,7 +67,7 @@ class TotalScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=1000)
     grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
+    description = RichTextUploadingField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-总分'
@@ -78,7 +79,7 @@ class LargeScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     grade = models.CharField(verbose_name='评级', max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
+    description = RichTextUploadingField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-大类'
@@ -90,7 +91,7 @@ class SubScoreInterval(BaseModel):
     min_score = models.IntegerField(verbose_name='最小值分数', help_text='最小值 <= score', default=0)
     max_score = models.IntegerField(verbose_name='最大值分数', help_text='score < 最大值', default=100)
     grade = models.CharField(verbose_name='评级',  max_length=32, help_text='评级', default='', null=True, blank=True)
-    description = models.TextField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
+    description = RichTextUploadingField(verbose_name='说明', default='', help_text='说明', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '分数区间-小类'
