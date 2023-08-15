@@ -214,7 +214,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',  # 工具条功能
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Image'],
+        ],
+        # 'toolbar': 'full',  # 工具条功能
         'height': 300,  # 编辑器高度
         'width': 800,  # 编辑器宽
     },

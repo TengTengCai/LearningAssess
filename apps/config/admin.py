@@ -41,3 +41,6 @@ class ArticleAdmin(admin.ModelAdmin):
 admin.site.register(Config, ConfigAdmin)
 admin.site.register(CourseInfo, CourseInfoAdmin)
 admin.site.register(Article, ArticleAdmin)
+admin.site.site_header = 'MET 学力矩阵'
+admin.site.site_title = 'MET 学力矩阵'
+admin.site.index_title = 'MET 学力矩阵'

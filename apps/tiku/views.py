@@ -1,5 +1,6 @@
 import datetime
 
+from bs4 import BeautifulSoup
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum, F, Q
 from django.shortcuts import render
@@ -112,6 +113,20 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     servey_result=serializer.instance,
                     subject=subject).save()
 
+    def parser_description(self, request, descr_text):
+        soup = BeautifulSoup(descr_text, features="html.parser")
+        if not bool(soup.find()):
+            return [{"type": "text", "content": descr_text}]
+        descr_list = []
+        for p in soup.find_all('p'):
+            for i in p.contents:
+                if isinstance(i, str):
+                    descr_list.append({"type": "text", "content": i})
+                elif i.name == 'img':
+                    img_src = i.attrs.get('src')
+                    descr_list.append({"type": "image", "content": request.build_absolute_uri(img_src)})
+        return descr_list
+
     @swagger_auto_schema(methods=['GET'], responses={200: SurveyResultSerializer})
     @action(methods=['GET'], detail=False, url_path=r'complete/(?P<id>\w+)')
     def complete(self, request, *args, **kwargs):
@@ -146,7 +161,9 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
             "total_score": max_score,
             "result_score": total_result_score,
             "total_grade": '' if total_score_interval is None else total_score_interval.grade,
-            "total_description": '' if total_score_interval is None else total_score_interval.description
+            "total_description": [] if total_score_interval is None else self.parser_description(
+                request, total_score_interval.description
+            )
         }
         radar_data_sub_dict = {}
         radar_data_large_list = []
@@ -188,7 +205,9 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                     "sub_result_score": sub_score,
                     "sub_class_grade": '' if sub_score_interval is None else sub_score_interval.grade,
                     "sub_class_grade_note": '，'.join(grade_note_list),
-                    "description": '' if sub_score_interval is None else sub_score_interval.description
+                    "description": [] if sub_score_interval is None else self.parser_description(
+                        request, sub_score_interval.description
+                    )
                 })
                 radar_data_sub_list.append({
                     "id": sub_class_id,
@@ -202,7 +221,10 @@ class SurveyResultViewSet(viewsets.ModelViewSet):
                 "large_total_score": large_max_class,
                 "large_result_score": large_result_score,
                 "large_class_grade": '' if large_score_interval is None else large_score_interval.grade,
-                "description": '' if large_score_interval is None else large_score_interval.description,
+                "description":
+                    [] if large_score_interval is None else self.parser_description(
+                        request, large_score_interval.description
+                    ),
                 "sub_class_list": sub_class_list
             })
             radar_data_large_list.append({
