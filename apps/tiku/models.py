@@ -153,6 +153,7 @@ class SurveyResult(BaseModel):
         return f'{self.test_paper}-{self.user}'
 
     class Meta:
+        ordering = ['-created']
         verbose_name_plural = '答题卡'
         db_table_comment = "答题卡"
 
