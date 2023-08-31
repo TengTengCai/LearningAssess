@@ -77,8 +77,9 @@ class ConfigSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Config
-        fields = ['index_image', 'index_image_url', 'xetong_address', 'xetong_address_url', 'shop_address',
-                  'shop_address_url', 'evaluation_image', 'evaluation_image_url']
+        fields = '__all__'
+        # fields = ['index_image', 'index_image_url', 'xetong_address', 'xetong_address_url', 'shop_address',
+        #           'shop_address_url', 'evaluation_image', 'evaluation_image_url']
 
 
 class CourseInfoSerializer(serializers.ModelSerializer):
