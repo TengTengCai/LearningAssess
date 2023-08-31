@@ -5,11 +5,14 @@ from apps.config.models import CourseInfo, Config, Article
 
 
 class ConfigSerializer(serializers.ModelSerializer):
-    index_image_url = serializers.SerializerMethodField(read_only=True, method_name='get_index_image_url')
-    xetong_address_url = serializers.SerializerMethodField(read_only=True, method_name='get_xetong_address_url')
+    # index_image_url = serializers.SerializerMethodField(read_only=True, method_name='get_index_image_url')
+    # xetong_address_url = serializers.SerializerMethodField(read_only=True, method_name='get_xetong_address_url')
+
     # index_image = serializers.SerializerMethodField(read_only=True, method_name='get_index_image')
-    evaluation_image_url = serializers.SerializerMethodField(read_only=True, method_name='get_evaluation_image_url')
-    shop_address_url = serializers.SerializerMethodField(read_only=True, method_name='get_shop_address_url')
+
+    # evaluation_image_url = serializers.SerializerMethodField(read_only=True, method_name='get_evaluation_image_url')
+    # shop_address_url = serializers.SerializerMethodField(read_only=True, method_name='get_shop_address_url')
+
     # evaluation_image = serializers.SerializerMethodField(read_only=True, method_name='get_evaluation_image')
 
     def get_index_image_url(self, config):
@@ -79,7 +82,7 @@ class ConfigSerializer(serializers.ModelSerializer):
 
 
 class CourseInfoSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
+    # image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
 
     def get_image_url(self, course_info):
         request = self.context.get('request')
@@ -95,7 +98,7 @@ class CourseInfoSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
+    # image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
 
     def get_image_url(self, article):
         request = self.context.get('request')

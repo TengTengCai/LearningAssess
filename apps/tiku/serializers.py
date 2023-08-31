@@ -11,7 +11,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
 
 class TestPaperSerializer(serializers.ModelSerializer):
-    desc_url = serializers.SerializerMethodField(read_only=True, method_name='get_desc_url')
+    # desc_url = serializers.SerializerMethodField(read_only=True, method_name='get_desc_url')
     subject_set = SubjectSerializer(many=True, read_only=True)
 
     def get_desc_url(self, test_paper):

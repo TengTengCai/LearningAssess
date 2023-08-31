@@ -12,18 +12,22 @@ def image_upload_to(instance, filename):
 
 
 class Config(BaseModel):
-    index_image = models.ImageField(
+    index_image = models.URLField(
         verbose_name='首页大图', default='', null=True, blank=True, help_text='首页顶部大图',
-        upload_to=image_upload_to)
-    xetong_address = models.ImageField(
+        # upload_to=image_upload_to
+    )
+    xetong_address = models.URLField(
         verbose_name='树成林公众号二维码图片地址', default='', null=True, blank=True, help_text='树成林公众号二维码图片地址',
-        upload_to=image_upload_to)
-    shop_address = models.ImageField(
+        # upload_to=image_upload_to
+    )
+    shop_address = models.URLField(
         verbose_name='逆袭商店二维码图片地址', default='', null=True, blank=True, help_text='逆袭商店二维码图片地址',
-        upload_to=image_upload_to)
-    evaluation_image = models.ImageField(
+        # upload_to=image_upload_to
+    )
+    evaluation_image = models.URLField(
         verbose_name='学习力测评图', default='', null=True, blank=True, help_text='中间部分的学习力测评图',
-        upload_to=image_upload_to)
+        # upload_to=image_upload_to
+    )
 
     class Meta:
         verbose_name_plural = "全局配置"
@@ -33,7 +37,10 @@ class Config(BaseModel):
 class CourseInfo(BaseModel):
     title = models.CharField(max_length=256, verbose_name='标题', help_text='标题')
     url = models.URLField(verbose_name='链接', help_text='点击的相关链接')
-    image = models.ImageField(verbose_name='图片地址', help_text='图片地址', upload_to=image_upload_to)
+    image = models.URLField(
+        verbose_name='图片地址', help_text='图片地址',
+        # upload_to=image_upload_to
+    )
 
     class Meta:
         verbose_name_plural = "课程资讯"
@@ -49,7 +56,10 @@ class Article(BaseModel):
     a_type = models.CharField(
         max_length=16, choices=ArticleType.choices, verbose_name='类型', help_text='类型')
     description = models.TextField(verbose_name='描述', help_text='描述')
-    image = models.ImageField(verbose_name='文章图片地址', help_text='文章图片地址', upload_to=image_upload_to)
+    image = models.URLField(
+        verbose_name='文章图片地址', help_text='文章图片地址',
+        # upload_to=image_upload_to
+    )
     url = models.URLField(verbose_name='链接', help_text='文章点击的相关链接')
 
     class Meta:
