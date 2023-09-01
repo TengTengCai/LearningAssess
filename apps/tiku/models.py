@@ -3,6 +3,7 @@ import uuid
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_oss_storage.backends import OssMediaStorage
 
 from apps.wechat.models import User
 from utils.base_model import BaseModel
@@ -19,9 +20,10 @@ class TestPaper(BaseModel):
     # total_score = models.IntegerField(verbose_name='测试总分数', default=1000, null=True, blank=True)
     spend_time = models.IntegerField(verbose_name='预计花费时间(min)', default=12, null=True, blank=True)
     description = models.TextField(verbose_name='说明', default='', null=True, blank=True, help_text='说明')
-    desc_url = models.URLField(
+    desc_url = models.ImageField(
         verbose_name='说明图片', default='', null=True, blank=True, help_text='说明图片',
-        # upload_to=image_upload_to
+        storage=OssMediaStorage,
+        upload_to=image_upload_to
     )
 
     def __str__(self):

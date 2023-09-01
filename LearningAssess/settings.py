@@ -32,6 +32,7 @@ BASE_CONFIG.read('config.ini')
 MYSQL_SETTINGS = BASE_CONFIG['MYSQL_SETTINGS']
 REDIS_SETTINGS = BASE_CONFIG['REDIS_SETTINGS']
 MINI_PROGRAM = BASE_CONFIG['MINI_PROGRAM']
+OSS_SETTINGS = BASE_CONFIG['OSS_SETTINGS']
 
 # Application definition
 
@@ -208,6 +209,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://119.23.111.230:8000",
     "https://dati.runjiahui.cn",
     "http://dati.runjiahui.cn",
+    "http://172.30.53.122:8000",
+    "https://xlzx.shuchenlin.com",
+    "http://xlzx.shuchenlin.com",
 ]
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
@@ -227,3 +231,8 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_UPLOAD_PATH = 'uploads'  # 上传图片保存路径，如果没有图片存储或者使用自定义存储位置，那么则直接写  ' ' ,
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 # 如果是使用django本身的存储方式，那么你就指名一个目录用来存储即可。
+
+OSS_ACCESS_KEY_ID = OSS_SETTINGS['access_key']
+OSS_ACCESS_KEY_SECRET = OSS_SETTINGS['access_secret']
+OSS_ENDPOINT = OSS_SETTINGS['endpoint']
+OSS_BUCKET_NAME = OSS_SETTINGS['bucket_name']

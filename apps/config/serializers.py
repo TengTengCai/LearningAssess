@@ -16,7 +16,7 @@ class ConfigSerializer(serializers.ModelSerializer):
     # evaluation_image = serializers.SerializerMethodField(read_only=True, method_name='get_evaluation_image')
 
     def get_index_image_url(self, config):
-        return config.index_image
+        return config.index_image.url
         # request = self.context.get('request')
         # index_image = config.index_image
         # if index_image is None:
@@ -29,7 +29,7 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(index_image.url)
 
     def get_evaluation_image_url(self, config):
-        return config.evaluation_image
+        return config.evaluation_image.url
         # request = self.context.get('request')
         # evaluation_image = config.evaluation_image
         # if evaluation_image is None:
@@ -42,7 +42,7 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(evaluation_image.url)
 
     def get_xetong_address_url(self, config):
-        return config.xetong_address
+        return config.xetong_address.url
         # request = self.context.get('request')
         # xetong_address = config.xetong_address
         # if xetong_address is None:
@@ -55,7 +55,7 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(xetong_address.url)
 
     def get_shop_address_url(self, config):
-        return config.shop_address
+        return config.shop_address.url
         # request = self.context.get('request')
         # shop_address = config.shop_address
         # if shop_address is None:
