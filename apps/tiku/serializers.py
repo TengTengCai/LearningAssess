@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 from rest_framework import serializers
 
+from LearningAssess.settings import OSS_CDN_NETLOC
 from apps.tiku.models import TestPaper, LargeClass, SubClass, Subject, SurveyResult, Option
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class TestPaperSerializer(serializers.ModelSerializer):
     def get_desc_url(self, test_paper):
         try:
             o = urlparse(test_paper.desc_url.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""

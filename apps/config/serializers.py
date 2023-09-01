@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 from rest_framework import serializers
 
+from LearningAssess.settings import OSS_CDN_NETLOC
 from apps.config.models import CourseInfo, Config, Article
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class ConfigSerializer(serializers.ModelSerializer):
     def get_index_image_url(self, config):
         try:
             o = urlparse(config.index_image.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
@@ -40,7 +41,7 @@ class ConfigSerializer(serializers.ModelSerializer):
     def get_evaluation_image_url(self, config):
         try:
             o = urlparse(config.evaluation_image.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
@@ -58,7 +59,7 @@ class ConfigSerializer(serializers.ModelSerializer):
     def get_xetong_address_url(self, config):
         try:
             o = urlparse(config.xetong_address.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
@@ -76,7 +77,7 @@ class ConfigSerializer(serializers.ModelSerializer):
     def get_shop_address_url(self, config):
         try:
             o = urlparse(config.shop_address.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
@@ -116,7 +117,7 @@ class CourseInfoSerializer(serializers.ModelSerializer):
     def get_image_url(self, course_info):
         try:
             o = urlparse(course_info.image.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
@@ -138,7 +139,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_image_url(self, article):
         try:
             o = urlparse(article.image.url)
-            return o._replace(netloc="oss.shuchenlin.com").geturl()
+            return o._replace(netloc=OSS_CDN_NETLOC).geturl()
         except Exception as e:
             logger.exception(e)
             return ""
