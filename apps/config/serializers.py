@@ -1,7 +1,11 @@
+import logging
+from urllib.parse import urlparse
 
 from rest_framework import serializers
 
 from apps.config.models import CourseInfo, Config, Article
+
+logger = logging.getLogger(__name__)
 
 
 class ConfigSerializer(serializers.ModelSerializer):
@@ -16,7 +20,12 @@ class ConfigSerializer(serializers.ModelSerializer):
     # evaluation_image = serializers.SerializerMethodField(read_only=True, method_name='get_evaluation_image')
 
     def get_index_image_url(self, config):
-        return config.index_image.url
+        try:
+            o = urlparse(config.index_image.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
         # request = self.context.get('request')
         # index_image = config.index_image
         # if index_image is None:
@@ -29,7 +38,12 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(index_image.url)
 
     def get_evaluation_image_url(self, config):
-        return config.evaluation_image.url
+        try:
+            o = urlparse(config.evaluation_image.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
         # request = self.context.get('request')
         # evaluation_image = config.evaluation_image
         # if evaluation_image is None:
@@ -42,7 +56,12 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(evaluation_image.url)
 
     def get_xetong_address_url(self, config):
-        return config.xetong_address.url
+        try:
+            o = urlparse(config.xetong_address.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
         # request = self.context.get('request')
         # xetong_address = config.xetong_address
         # if xetong_address is None:
@@ -55,7 +74,12 @@ class ConfigSerializer(serializers.ModelSerializer):
         # return request.build_absolute_uri(xetong_address.url)
 
     def get_shop_address_url(self, config):
-        return config.shop_address.url
+        try:
+            o = urlparse(config.shop_address.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
         # request = self.context.get('request')
         # shop_address = config.shop_address
         # if shop_address is None:
@@ -87,14 +111,20 @@ class ConfigSerializer(serializers.ModelSerializer):
 
 
 class CourseInfoSerializer(serializers.ModelSerializer):
-    # image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
+    image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
 
     def get_image_url(self, course_info):
-        request = self.context.get('request')
-        image_url = course_info.image.url
-        if image_url is None:
-            return ''
-        return request.build_absolute_uri(image_url)
+        try:
+            o = urlparse(course_info.image.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
+        # request = self.context.get('request')
+        # image_url = course_info.image.url
+        # if image_url is None:
+        #     return ''
+        # return request.build_absolute_uri(image_url)
 
     class Meta:
         model = CourseInfo
@@ -103,14 +133,20 @@ class CourseInfoSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    # image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
+    image = serializers.SerializerMethodField(read_only=True, method_name='get_image_url')
 
     def get_image_url(self, article):
-        request = self.context.get('request')
-        image_url = article.image.url
-        if image_url is None:
-            return ''
-        return request.build_absolute_uri(image_url)
+        try:
+            o = urlparse(article.image.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
+        # request = self.context.get('request')
+        # image_url = article.image.url
+        # if image_url is None:
+        #     return ''
+        # return request.build_absolute_uri(image_url)
 
     class Meta:
         model = Article

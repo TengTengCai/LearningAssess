@@ -1,6 +1,11 @@
+import logging
+from urllib.parse import urlparse
+
 from rest_framework import serializers
 
 from apps.tiku.models import TestPaper, LargeClass, SubClass, Subject, SurveyResult, Option
+
+logger = logging.getLogger(__name__)
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -11,19 +16,25 @@ class SubjectSerializer(serializers.ModelSerializer):
 
 
 class TestPaperSerializer(serializers.ModelSerializer):
-    # desc_url = serializers.SerializerMethodField(read_only=True, method_name='get_desc_url')
+    desc_url = serializers.SerializerMethodField(read_only=True, method_name='get_desc_url')
     subject_set = SubjectSerializer(many=True, read_only=True)
 
     def get_desc_url(self, test_paper):
-        request = self.context.get('request')
-        if test_paper is None:
-            return ''
         try:
-            if not hasattr(test_paper.desc_url, 'url'):
-                return ''
-        except ValueError:
-            return ''
-        return request.build_absolute_uri(test_paper.desc_url.url)
+            o = urlparse(test_paper.desc_url.url)
+            return o._replace(netloc="oss.shuchenlin.com").geturl()
+        except Exception as e:
+            logger.exception(e)
+            return ""
+        # request = self.context.get('request')
+        # if test_paper is None:
+        #     return ''
+        # try:
+        #     if not hasattr(test_paper.desc_url, 'url'):
+        #         return ''
+        # except ValueError:
+        #     return ''
+        # return request.build_absolute_uri(test_paper.desc_url.url)
 
     class Meta:
         model = TestPaper
